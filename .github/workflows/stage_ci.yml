@@ -6,7 +6,7 @@ on:
     types: ["closed"]
 env:
   TEST_TAG: seatbooking_api:test
-  
+
 jobs:
   build:
     if: github.event.pull_request.merged == true
@@ -36,7 +36,7 @@ jobs:
   docker_build:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
-    needs: ['build','lint']
+    needs: ["build", "lint"]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -56,11 +56,9 @@ jobs:
       - name: Test Docker Container
         run: |
           docker run -d -p 8081:3000 --name node_api ${{ env.TEST_TAG }}
-          if curl http://localhost:8081/api/infra > HTML_output
+          docker ps
+          if curl http://localhost:8081/api/health > HTML_output
           then exit 0
           else exit 1
           fi
           docker stop node-api
-          
-          
-    
