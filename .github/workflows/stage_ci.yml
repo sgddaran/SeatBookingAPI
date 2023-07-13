@@ -56,7 +56,10 @@ jobs:
       - name: Test Docker Container
         run: |
           docker run -d -p 8081:3000 --name node_api ${{ env.TEST_TAG }}
-          ping_docker.sh
+          if curl http://locahost:8081/api/infra > HTML_output
+          then exit 0
+          else exit 1
+          fi
           docker stop node-api
           
           
