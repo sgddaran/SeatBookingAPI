@@ -13,7 +13,7 @@ RUN rm tsconfig.json
 RUN rm -rf node_modules
 RUN rm -rf src
 
-RUN npm ci --omit=dev --omit=peer
+RUN npm ci --omit=dev
 
 EXPOSE 3000
 CMD [ "npm", "start" ]

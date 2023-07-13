@@ -1,11 +1,11 @@
 // this shim is required
 import { createKoaServer } from "routing-controllers";
-import { InfraRouter } from "./routers";
+import { HealthRouter, InfraRouter } from "./routers";
 
 const port = process.env.APP_PORT || 3000;
 const app = createKoaServer({
   routePrefix: "/api",
-  controllers: [InfraRouter],
+  controllers: [HealthRouter, InfraRouter],
 });
 
 app.listen(port, () => {
