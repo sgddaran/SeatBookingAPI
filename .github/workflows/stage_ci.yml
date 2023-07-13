@@ -55,5 +55,9 @@ jobs:
           tags: ${{ env.TEST_TAG }}
       - name: Test Docker Container
         run: |
-          docker run --rm ${{ env.TEST_TAG }}
+          docker run -d -p 8081:3000 --name node_api ${{ env.TEST_TAG }}
+          ping_docker.sh
+          docker stop node-api
+          
+          
     
