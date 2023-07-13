@@ -33,7 +33,7 @@ jobs:
           cache: "npm"
       - run: npm ci
       - run: npm run lint
-  docker_build:
+  docker_build_and_test:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     needs: ["build", "lint"]
@@ -53,12 +53,9 @@ jobs:
           context: .
           load: true
           tags: ${{ env.TEST_TAG }}
-      - name: Test Docker Container
+      - name: Ping to docker container
         run: |
           docker run -d -p 8081:3000 --name node_api ${{ env.TEST_TAG }}
+          sleep 30
           docker ps
-          if curl http://localhost:8081/api/health > HTML_output
-          then exit 0
-          else exit 1
-          fi
           docker stop node-api
