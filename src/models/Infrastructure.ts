@@ -51,5 +51,10 @@ export class Location {
 }
 
 export class InfraResponse extends BaseResponse {
+  user: string;
   locations: Location[];
+  constructor(usr: string) {
+    super();
+    this.user = usr;
+  }
 }
