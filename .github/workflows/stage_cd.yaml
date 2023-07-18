@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set current date as build ts env variable
-        run: echo "BUILD_TS=$(date +'%Y%m%dh%Hm%Ms%S')" >> $GITHUB_ENV
+        run: echo "BUILD_TS=$(date +'%Y%m%d_%H.%M.%S')" >> $GITHUB_ENV
       #- name: Echo current date
       #  run: echo $BUILD_TS # Gives "2022-12-11T01:42:20"
       #- name: Output Run ID
