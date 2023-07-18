@@ -5,7 +5,7 @@ on:
     branches: ["stage"]
     types: ["closed"]
 env:
-  TEST_TAG: seatbooking_api:test
+  TEST_TAG: seatbooking_api
 permissions:
   pull-requests: write
 
