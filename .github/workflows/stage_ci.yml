@@ -1,3 +1,4 @@
+
 name: Staging CI - Code SAST, Docker Sanity & Docker Scan
 on:
   pull_request:
@@ -39,7 +40,9 @@ jobs:
           with: 
             languages: javascript
         - name: Perform CodeQL Analysis
-          uses: github/codeql-action/analyze@v2    
+          uses: github/codeql-action/analyze@v2
+          with:
+            category: "/language:javascript"
   build_docker:
     runs-on: ubuntu-latest
     name: Build Docker 
