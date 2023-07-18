@@ -1,7 +1,7 @@
-name: Publish the Stage
+name: Publish to Production
 on:
   pull_request:
-    branches: ["stage"]
+    branches: ["production"]
     types: ["closed"]
 env:
   IMG_NAME: seatbooking_api
