@@ -19,7 +19,7 @@ jobs:
           node-version: 18.x
           cache: "npm"
       - name: Set current date as env variable
-        run: echo "BUILD_TS=$(date +'%Y%m%dT%H%M%S%sss')" >> $GITHUB_ENV
+        run: echo "BUILD_TS=$(date +'%Y%m%dT%H:%M:%S.%s')" >> $GITHUB_ENV
       - name: Echo current date
         run: echo $BUILD_TS # Gives "2022-12-11T01:42:20"
       - run: npm ci
