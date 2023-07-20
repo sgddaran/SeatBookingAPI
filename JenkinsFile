@@ -1,0 +1,13 @@
+pipeline {
+  agent any
+
+  stages {
+    stage('Deploy to K8s') {
+      steps {
+        withKubeConfig([credentialsId: 'kuber-config']) {
+          sh 'kubectl get pods'
+        }
+      } 
+    }
+  }
+}
