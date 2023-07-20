@@ -1,44 +1,32 @@
 name: Publish to Production
 on:
+  push:
+    branches: ["sgddara*"]
   pull_request:
     branches: ["production"]
     types: ["closed"]
 env:
   IMG_NAME: seatbooking_api
 jobs:
-  build_docker:
-    if: github.event.pull_request.merged == true
+  deploy:
+    name: Deploy
     runs-on: ubuntu-latest
     steps:
-      - name: Set current date as build ts env variable
-        run: echo "BUILD_TS=$(date +'%Y%m%d_%H.%M.%S')" >> $GITHUB_ENV
-      #- name: Echo current date
-      #  run: echo $BUILD_TS # Gives "2022-12-11T01:42:20"
-      #- name: Output Run ID
-      #  run: echo ${{ github.run_id }}
-      #- name: Output Run Number
-      #  run: echo ${{ github.run_number }}
-      #- name: Output Run Attempt
-      #  run: echo ${{ github.run_attempt }}
-      - name: Checkout
+      - name: Set the Kubernetes context
+        uses: azure/k8s-set-context@v2
+        with:
+          method: service-account
+          k8s-url:  http://172.23.112.1:8081
+          k8s-secret: ${{ secrets.KUBE_TOKEN }}
+
+      - name: Checkout source code
         uses: actions/checkout@v3
-      - name: Setup docker buildx
-        uses: docker/setup-buildx-action@v2
-      - name: Login to DockerHub
-        uses: docker/login-action@v2
+
+      - name: Deploy to the Kubernetes cluster
+        uses: azure/k8s-deploy@v1
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: print tag name
-        run: |
-          echo ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMG_NAME }}:${{env.BUILD_TS}}
-      - name: Push Docker to hub
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          push: true
-          tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMG_NAME }}:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMG_NAME }}:${{env.BUILD_TS}}
-            
-      
+          namespace: default
+          manifests: |
+            deployment.yaml
+          images: |
+            dhamodaran/seatbooking_api:latest
